@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>えぬチャリ</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="game-wrapper">
+    <canvas id="game-canvas"></canvas>
+
+    <div id="ui-overlay">
+      <!-- タイトル画面 -->
+      <div id="screen-title" class="screen active">
+        <div class="title-logo">えぬチャリ</div>
+        <div class="title-sub">崖を越えてひたすら走れ</div>
+        <div class="tap-hint blink">タップでスタート</div>
+        <div class="best-display" id="title-best"></div>
+        <div class="hint-text">2回タップで2段ジャンプ</div>
+      </div>
+
+      <!-- プレイ中HUD -->
+      <div id="screen-play" class="screen">
+        <div id="hud">
+          <div id="hud-distance">
+            <span class="hud-label">距離</span>
+            <span id="current-distance">0</span><span class="hud-unit">m</span>
+          </div>
+          <div id="hud-best">
+            <span class="hud-label">ベスト</span>
+            <span id="hud-best-value">0</span><span class="hud-unit">m</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ゲームオーバー画面 -->
+      <div id="screen-gameover" class="screen">
+        <div class="gameover-title">ゲームオーバー</div>
+        <div class="result-block">
+          <div class="result-row">
+            <span class="result-label">今回の距離</span>
+            <span id="result-distance" class="result-value">0</span><span class="result-unit">m</span>
+          </div>
+          <div class="result-divider"></div>
+          <div class="result-row best-row" id="new-best-row" style="display:none">
+            <span class="new-best-badge">NEW BEST</span>
+            <span id="result-best" class="result-value best-value">0</span><span class="result-unit">m</span>
+          </div>
+          <div class="result-row" id="normal-best-row">
+            <span class="result-label">ベスト記録</span>
+            <span id="result-best-normal" class="result-value">0</span><span class="result-unit">m</span>
+          </div>
+          <div class="result-row plays-row">
+            <span class="result-label">累計プレイ</span>
+            <span id="result-plays" class="result-value plays-value">0</span><span class="result-unit">回</span>
+          </div>
+        </div>
+        <button id="btn-share" class="btn btn-share">シェア</button>
+        <button id="btn-retry" class="btn btn-retry">もう一回</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/script.js" defer></script>
+</body>
+</html>

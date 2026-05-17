@@ -1,0 +1,264 @@
+:root {
+  --color-bg:      #0a1520;
+  --color-navy:    #1a2332;
+  --color-blue:    #00d4ff;
+  --color-orange:  #CC785C;
+  --color-white:   #e8f4f8;
+  --color-gray:    #4a6070;
+  --color-dim:     #2a3d52;
+  --color-success: #4ade80;
+  --font-main: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+  --radius:    12px;
+  --transition: 0.2s ease;
+}
+
+* {
+  margin: 0; padding: 0; box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: var(--color-bg);
+  font-family: var(--font-main);
+  color: var(--color-white);
+}
+
+#game-wrapper {
+  position: relative;
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+}
+
+#game-canvas {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* ---- UI Overlay ---- */
+#ui-overlay {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+
+.screen {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: none;
+  flex-direction: column; align-items: center; justify-content: center;
+  pointer-events: none;
+}
+
+.screen.active { display: flex; }
+
+/* ---- タイトル ---- */
+#screen-title {
+  background: linear-gradient(180deg, rgba(10,21,32,0.82) 0%, rgba(10,21,32,0.55) 100%);
+  pointer-events: all;
+  gap: 0;
+}
+
+.title-logo {
+  font-size: clamp(2.8rem, 10vw, 4.5rem);
+  font-weight: 900;
+  color: var(--color-blue);
+  text-shadow: 0 0 30px rgba(0,212,255,0.6), 0 2px 0 rgba(0,0,0,0.5);
+  letter-spacing: 0.05em;
+  line-height: 1.1;
+}
+
+.title-sub {
+  font-size: clamp(0.85rem, 3.2vw, 1rem);
+  color: var(--color-gray);
+  letter-spacing: 0.18em;
+  margin-top: 0.45em;
+  margin-bottom: 2.2em;
+}
+
+.tap-hint {
+  font-size: clamp(1rem, 4vw, 1.25rem);
+  color: var(--color-white);
+  letter-spacing: 0.15em;
+  padding: 0.7em 2em;
+  border: 2px solid rgba(0,212,255,0.5);
+  border-radius: 50px;
+  background: rgba(0,212,255,0.07);
+}
+
+.blink { animation: blink 1.4s ease-in-out infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.best-display {
+  margin-top: 1.8em;
+  font-size: clamp(0.78rem, 2.8vw, 0.95rem);
+  color: var(--color-gray);
+  min-height: 1.5em;
+}
+
+.hint-text {
+  margin-top: 0.7em;
+  font-size: clamp(0.72rem, 2.5vw, 0.85rem);
+  color: var(--color-dim);
+  letter-spacing: 0.1em;
+}
+
+/* ---- HUD ---- */
+#screen-play { pointer-events: none; }
+
+#hud {
+  position: absolute; top: 0; left: 0; right: 0;
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: clamp(0.8rem,3vw,1.2rem) clamp(1rem,4vw,1.5rem);
+  padding-top: max(env(safe-area-inset-top, 0px), clamp(0.8rem,3vw,1.2rem));
+}
+
+#hud-distance {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 0;
+}
+
+#hud-best {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 0;
+}
+
+.hud-label {
+  font-size: clamp(0.52rem, 2vw, 0.68rem);
+  color: var(--color-gray);
+  letter-spacing: 0.15em;
+  line-height: 1;
+}
+
+#current-distance {
+  font-size: clamp(1.6rem, 7vw, 2.4rem);
+  font-weight: 900;
+  color: var(--color-blue);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 15px rgba(0,212,255,0.4);
+}
+
+#hud-best-value {
+  font-size: clamp(1.6rem, 7vw, 2.4rem);
+  font-weight: 900;
+  color: var(--color-gray);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.hud-unit {
+  font-size: clamp(0.68rem, 2.3vw, 0.88rem);
+  color: var(--color-gray);
+  margin-left: 2px;
+}
+
+/* ---- ゲームオーバー ---- */
+#screen-gameover {
+  background: rgba(10,21,32,0.88);
+  pointer-events: all;
+  gap: 1.1em;
+  padding: 2em;
+}
+
+.gameover-title {
+  font-size: clamp(1.8rem, 7vw, 2.5rem);
+  font-weight: 900;
+  color: var(--color-orange);
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 20px rgba(204,120,92,0.5);
+  margin-bottom: 0.2em;
+}
+
+.result-block {
+  background: rgba(26,35,50,0.9);
+  border: 1px solid rgba(0,212,255,0.18);
+  border-radius: var(--radius);
+  padding: 1.1em 1.8em;
+  width: 100%; max-width: 340px;
+  display: flex; flex-direction: column; gap: 0.6em;
+}
+
+.result-row {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 0.5em;
+}
+
+.result-label {
+  font-size: clamp(0.78rem, 2.8vw, 0.92rem);
+  color: var(--color-gray);
+  letter-spacing: 0.1em;
+  flex-shrink: 0;
+}
+
+.result-value {
+  font-size: clamp(1.35rem, 5.5vw, 1.9rem);
+  font-weight: 900;
+  color: var(--color-white);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.result-unit {
+  font-size: clamp(0.68rem, 2.4vw, 0.82rem);
+  color: var(--color-gray);
+}
+
+.result-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.07);
+  margin: 0.1em 0;
+}
+
+.best-row {
+  align-items: center; gap: 0.7em;
+}
+
+.new-best-badge {
+  font-size: clamp(0.52rem, 2vw, 0.65rem);
+  font-weight: 900;
+  color: var(--color-bg);
+  background: var(--color-success);
+  padding: 0.2em 0.55em;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+  animation: pulse-badge 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-badge { from{transform:scale(1)} to{transform:scale(1.06)} }
+
+.best-value  { color: var(--color-success); text-shadow: 0 0 12px rgba(74,222,128,0.45); }
+.plays-value { color: var(--color-gray); font-size: clamp(1.1rem, 4.5vw, 1.5rem); }
+
+.plays-row { border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.5em; }
+
+/* ---- ボタン ---- */
+.btn {
+  width: 100%; max-width: 340px;
+  padding: 0.9em 1em;
+  border: none; border-radius: 50px;
+  font-family: var(--font-main);
+  font-size: clamp(1rem, 4vw, 1.1rem);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: transform var(--transition), opacity var(--transition);
+  -webkit-appearance: none;
+}
+
+.btn:active { transform: scale(0.96); opacity: 0.85; }
+
+.btn-share { background: var(--color-blue); color: var(--color-bg); }
+.btn-retry { background: transparent; color: var(--color-blue); border: 2px solid rgba(0,212,255,0.5); }
+
+/* ---- 安全エリア ---- */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  #screen-gameover { padding-bottom: calc(2em + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* ---- PC向け ---- */
+@media (min-width: 600px) {
+  .title-logo { font-size: 4rem; }
+  #current-distance { font-size: 2rem; }
+}
